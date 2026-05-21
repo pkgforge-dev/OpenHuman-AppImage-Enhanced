@@ -6,7 +6,7 @@ ARCH=$(uname -m)
 
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
-# pacman -Syu --noconfirm PACKAGESHERE
+pacman -Syu --noconfirm libnss_nis nss-mdns nss xdotool
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
@@ -30,6 +30,10 @@ rm -f ./*.tar.gz /tmp/temp.deb
 
 mkdir -p ./AppDir/bin
 cp -vr ./usr/share/OpenHuman/* ./AppDir/bin
+
+# upstream depends on an older version of xdotool
+patchelf --replace-needed libxdo.so.3 libxdo.so.4 ./AppDir/bin/OpenHuman
+
 cp -v ./usr/share/applications/*.desktop ./AppDir
 cp -v ./usr/share/icons/hicolor/128x128/apps/OpenHuman.png ./AppDir
 cp -v ./usr/share/icons/hicolor/128x128/apps/OpenHuman.png ./AppDir/.DirIcon
